@@ -12,6 +12,7 @@ RUN set -eux; \
 		make \
 		pkg-config \
 		wget \
+		ca-certificates \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
