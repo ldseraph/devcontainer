@@ -11,6 +11,7 @@ RUN set -eux; \
 		libc6-dev \
 		make \
 		pkg-config \
+		wget \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
