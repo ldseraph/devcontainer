@@ -3,6 +3,9 @@ FROM ubuntu:latest
 ENV GOLANG_VERSION 1.19.5
 ENV PATH /usr/local/go/bin:$PATH
 
+RUN apt update; \
+		apt install wget
+
 RUN echo "deb [signed-by=/usr/share/keyrings/azlux-archive-keyring.gpg] http://packages.azlux.fr/debian/ stable main" | tee /etc/apt/sources.list.d/azlux.list
 RUN wget -O /usr/share/keyrings/azlux-archive-keyring.gpg  https://azlux.fr/repo.gpg
 
@@ -14,7 +17,6 @@ RUN set -eux; \
 		libc6-dev \
 		make \
 		pkg-config \
-		wget \
 		ca-certificates \
 		git \
 		zsh \
