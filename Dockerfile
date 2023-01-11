@@ -4,7 +4,7 @@ ENV GOLANG_VERSION 1.19.5
 ENV PATH /usr/local/go/bin:$PATH
 
 RUN set -eux; \
-	apt update \
+	apt update; \
 	apt install -y --no-install-recommends \
 		g++ \
 		gcc \
