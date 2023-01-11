@@ -15,7 +15,7 @@ RUN set -eux; \
 	rm -rf /var/lib/apt/lists/*
 
 RUN set -eux; \
-  url='https://dl.google.com/go/go$GOLANG_VERSION.linux-amd64.tar.gz'; \
+  url="https://dl.google.com/go/go$GOLANG_VERSION.linux-amd64.tar.gz"; \
 	wget -O go.tgz "$url" --progress=dot:giga; \
 	tar -C /usr/local -xzf go.tgz; \
 	rm go.tgz; \
