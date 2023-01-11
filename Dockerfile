@@ -56,8 +56,8 @@ RUN git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUS
 COPY .zshrc ./
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-RUN nvm install node
-RUN corepack enable
+# RUN nvm install node
+# RUN corepack enable
 
 ENV MIRRORS "http://mirrors.tuna.tsinghua.edu.cn"
     # MIRRORS="http://mirrors.aliyun.com"
