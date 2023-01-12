@@ -132,7 +132,7 @@ alias llt='exa -l --git --tree'
 alias br='broot'
 # alias grep='rg' #ripgrep
 # alias du='dust'
-alias cat='bat'
+alias cat='batcat'
 # alias df='duf'
 # alias find='fdfind'
 # eval "$(mcfly init zsh)"

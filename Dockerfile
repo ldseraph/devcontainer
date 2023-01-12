@@ -36,17 +36,18 @@ RUN set -eux; \
 
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
-RUN mkdir -p "$GOPATH/src" "$GOPATH/bin" && chmod -R 777 "$GOPATH"
-
-RUN go install github.com/cosmtrek/air@latest; \
-	go install golang.org/x/lint/golint@latest; \
-	go install github.com/axw/gocov/gocov@latest; \
-	go install github.com/AlekSi/gocov-xml@latest; \
-	go install github.com/tebeka/go2xunit@latest; \
-	go install github.com/mitchellh/gox@latest; \
-	go install github.com/swaggo/swag/cmd/swag@latest; \
-	go clean -cache; \
-	go env -w GOFLAGS=-buildvcs=false
+RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
+		chmod -R 777 "$GOPATH"; \
+		go install github.com/cweill/gotests/gotests@v1.6.0; \
+    go install github.com/fatih/gomodifytags@v1.16.0; \
+    go install github.com/josharian/impl@v1.1.0; \
+    go install github.com/haya14busa/goplay/cmd/goplay@v1.0.0; \
+    go install github.com/go-delve/delve/cmd/dlv@latest; \
+    go install honnef.co/go/tools/cmd/staticcheck@latest; \
+    go install golang.org/x/tools/gopls@latest; \
+    go install github.com/ramya-rao-a/go-outline@v0.0.0-20210608161538-9736a4bde949; \
+		go clean -cache; \
+		go env -w GOFLAGS=-buildvcs=false
 
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended; \
 		chsh --shell /bin/zsh root; \
@@ -62,6 +63,7 @@ RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | 
 # RUN nvm install node
 # RUN corepack enable
 
+ENV TZ Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
 		echo 'Asia/Shanghai' > /etc/timezone
 
