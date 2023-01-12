@@ -64,8 +64,6 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
 		go env -w GOFLAGS=-buildvcs=false
 
-
-
 ARG USERNAME=luca
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
@@ -95,7 +93,7 @@ RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions; \
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-COPY .zshrc .p10k.zsh /home/$USERNAME
+COPY --chown=$USERNAME .zshrc .p10k.zsh /home/$USERNAME
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # RUN nvm install node
@@ -116,14 +114,14 @@ RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
 
 USER $USERNAME
 
-COPY --from=gomodifytags /bin /go/bin/gomodifytags
-COPY --from=goplay  /bin /go/bin/goplay
-COPY --from=gotests /bin /go/bin/gotests
-COPY --from=dlv /bin /go/bin/dlv
-COPY --from=mockery /bin /go/bin/mockery
-COPY --from=gomock /bin /go/bin/gomock
-COPY --from=mockgen /bin /go/bin/mockgen
-COPY --from=gopls /bin /go/bin/gopls
-COPY --from=golangci-lint /bin /go/bin/golangci-lint
-COPY --from=impl /bin /go/bin/impl
-COPY --from=gopkgs /bin /go/bin/gopkgs
+COPY --chown=$USERNAME --from=gomodifytags /bin /go/bin/gomodifytags
+COPY --chown=$USERNAME --from=goplay  /bin /go/bin/goplay
+COPY --chown=$USERNAME --from=gotests /bin /go/bin/gotests
+COPY --chown=$USERNAME --from=dlv /bin /go/bin/dlv
+COPY --chown=$USERNAME --from=mockery /bin /go/bin/mockery
+COPY --chown=$USERNAME --from=gomock /bin /go/bin/gomock
+COPY --chown=$USERNAME --from=mockgen /bin /go/bin/mockgen
+COPY --chown=$USERNAME --from=gopls /bin /go/bin/gopls
+COPY --chown=$USERNAME --from=golangci-lint /bin /go/bin/golangci-lint
+COPY --chown=$USERNAME --from=impl /bin /go/bin/impl
+COPY --chown=$USERNAME --from=gopkgs /bin /go/bin/gopkgs
