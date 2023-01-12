@@ -59,6 +59,8 @@ RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | 
 # RUN nvm install node
 # RUN corepack enable
 
+USER root
+
 ENV TZ Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
 		echo 'Asia/Shanghai' > /etc/timezone
@@ -68,3 +70,5 @@ ENV MIRRORS "http://mirrors.tuna.tsinghua.edu.cn"
 
 RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
     sed -i "s@http://.*security.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list
+
+USER luca
