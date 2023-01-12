@@ -56,16 +56,17 @@ RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions; \
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-COPY .zshrc /root
+COPY .zshrc .p10k.zsh /root
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # RUN nvm install node
 # RUN corepack enable
+
+RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
+		echo 'Asia/Shanghai' > /etc/timezone
 
 ENV MIRRORS "http://mirrors.tuna.tsinghua.edu.cn"
     # MIRRORS="http://mirrors.aliyun.com"
 
 RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
     sed -i "s@http://.*security.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list
-
-
