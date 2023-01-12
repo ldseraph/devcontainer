@@ -38,15 +38,6 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
-		go install github.com/cweill/gotests/gotests@v1.6.0; \
-    go install github.com/fatih/gomodifytags@v1.16.0; \
-    go install github.com/josharian/impl@v1.1.0; \
-    go install github.com/haya14busa/goplay/cmd/goplay@v1.0.0; \
-    go install github.com/go-delve/delve/cmd/dlv@latest; \
-    go install honnef.co/go/tools/cmd/staticcheck@latest; \
-    go install golang.org/x/tools/gopls@latest; \
-    go install github.com/ramya-rao-a/go-outline@v0.0.0-20210608161538-9736a4bde949; \
-		go clean -cache; \
 		go env -w GOFLAGS=-buildvcs=false
 
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended; \
