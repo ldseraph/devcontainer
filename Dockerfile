@@ -40,11 +40,6 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
 		go env -w GOFLAGS=-buildvcs=false
 
-RUN useradd -ms /bin/bash -u 1000 luca
-RUN groupmod -g 1000 luca
-USER luca
-WORKDIR /home/luca
-
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended; \
 		chsh --shell /bin/zsh luca; \
 		git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k; \
@@ -59,8 +54,6 @@ RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | 
 # RUN nvm install node
 # RUN corepack enable
 
-USER root
-
 ENV TZ Asia/Shanghai
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
 		echo 'Asia/Shanghai' > /etc/timezone
@@ -70,5 +63,3 @@ ENV MIRRORS "http://mirrors.tuna.tsinghua.edu.cn"
 
 RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
     sed -i "s@http://.*security.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list
-
-USER luca
