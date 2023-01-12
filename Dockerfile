@@ -40,6 +40,20 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
 		go env -w GOFLAGS=-buildvcs=false
 
+ARG USERNAME=luca
+ARG USER_UID=1000
+ARG USER_GID=$USER_UID
+
+RUN groupadd --gid $USER_GID $USERNAME \
+    && useradd --uid $USER_UID --gid $USER_GID -m $USERNAME \
+    && apt-get install -y sudo \
+    && echo $USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$USERNAME \
+    && chmod 0440 /etc/sudoers.d/$USERNAME
+
+WORKDIR /home/luca
+
+USER $USERNAME
+
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended; \
 		chsh --shell /bin/zsh luca; \
 		git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k; \
@@ -48,13 +62,16 @@ RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions; \
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-COPY .zshrc .p10k.zsh /root
+COPY .zshrc .p10k.zsh ./
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # RUN nvm install node
 # RUN corepack enable
 
 ENV TZ Asia/Shanghai
+
+USER root
+
 RUN ln -sf /usr/share/zoneinfo/Asia/Shanghai /etc/localtime; \
 		echo 'Asia/Shanghai' > /etc/timezone
 
@@ -63,3 +80,5 @@ ENV MIRRORS "http://mirrors.tuna.tsinghua.edu.cn"
 
 RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
     sed -i "s@http://.*security.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list
+
+USER $USERNAME
