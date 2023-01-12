@@ -1,3 +1,27 @@
+ARG GOMODIFYTAGS_VERSION=v1.16.0
+ARG GOPLAY_VERSION=v1.0.0
+ARG GOTESTS_VERSION=v1.6.0
+ARG DLV_VERSION=v1.20.1
+ARG MOCKERY_VERSION=v2.16.0
+ARG GOMOCK_VERSION=v1.6.0
+ARG MOCKGEN_VERSION=v1.6.0
+ARG GOPLS_VERSION=v0.11.0
+ARG GOLANGCILINT_VERSION=v1.50.1
+ARG IMPL_VERSION=v1.1.0
+ARG GOPKGS_VERSION=v2.1.2
+
+FROM qmcgaw/binpot:gomodifytags-${GOMODIFYTAGS_VERSION} AS gomodifytags
+FROM qmcgaw/binpot:goplay-${GOPLAY_VERSION} AS goplay
+FROM qmcgaw/binpot:gotests-${GOTESTS_VERSION} AS gotests
+FROM qmcgaw/binpot:dlv-${DLV_VERSION} AS dlv
+FROM qmcgaw/binpot:mockery-${MOCKERY_VERSION} AS mockery
+FROM qmcgaw/binpot:gomock-${GOMOCK_VERSION} AS gomock
+FROM qmcgaw/binpot:mockgen-${MOCKGEN_VERSION} AS mockgen
+FROM qmcgaw/binpot:gopls-${GOPLS_VERSION} AS gopls
+FROM qmcgaw/binpot:golangci-lint-${GOLANGCILINT_VERSION} AS golangci-lint
+FROM qmcgaw/binpot:impl-${IMPL_VERSION} AS impl
+FROM qmcgaw/binpot:gopkgs-${GOPKGS_VERSION} AS gopkgs
+
 FROM ubuntu:latest
 
 ENV GOLANG_VERSION 1.19.5
@@ -39,6 +63,8 @@ ENV PATH $GOPATH/bin:$PATH
 RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
 		go env -w GOFLAGS=-buildvcs=false
+
+
 
 ARG USERNAME=luca
 ARG USER_UID=1000
@@ -89,3 +115,15 @@ RUN sed -i "s@http://.*archive.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list; \
     sed -i "s@http://.*security.ubuntu.com@$MIRRORS@g" /etc/apt/sources.list
 
 USER $USERNAME
+
+COPY --from=gomodifytags /bin /go/bin/gomodifytags
+COPY --from=goplay  /bin /go/bin/goplay
+COPY --from=gotests /bin /go/bin/gotests
+COPY --from=dlv /bin /go/bin/dlv
+COPY --from=mockery /bin /go/bin/mockery
+COPY --from=gomock /bin /go/bin/gomock
+COPY --from=mockgen /bin /go/bin/mockgen
+COPY --from=gopls /bin /go/bin/gopls
+COPY --from=golangci-lint /bin /go/bin/golangci-lint
+COPY --from=impl /bin /go/bin/impl
+COPY --from=gopkgs /bin /go/bin/gopkgs
