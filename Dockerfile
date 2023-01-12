@@ -40,15 +40,20 @@ RUN mkdir -p "$GOPATH/src" "$GOPATH/bin"; \
 		chmod -R 777 "$GOPATH"; \
 		go env -w GOFLAGS=-buildvcs=false
 
+RUN useradd -ms /bin/bash -u 1000 luca
+RUN groupmod -g 1000 luca
+USER luca
+WORKDIR /home/luca
+
 RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools/install.sh -O -)" "" --unattended; \
-		chsh --shell /bin/zsh root; \
-		git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-$HOME/.oh-my-zsh/custom}/themes/powerlevel10k; \
+		chsh --shell /bin/zsh luca; \
+		git clone --depth=1 https://gitee.com/romkatv/powerlevel10k.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/themes/powerlevel10k; \
 		git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:-${ZSH:-~/.oh-my-zsh}/custom}/plugins/zsh-completions; \
 		git clone https://github.com/Aloxaf/fzf-tab ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/fzf-tab; \
 		git clone https://github.com/zsh-users/zsh-autosuggestions ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-autosuggestions; \
 		git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
 
-COPY .zshrc .p10k.zsh /root
+COPY .zshrc .p10k.zsh ~/
 
 RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
 # RUN nvm install node
