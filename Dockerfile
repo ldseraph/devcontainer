@@ -48,6 +48,7 @@ RUN set -eux; \
 		broot \
 		btop \
 		bat \
+		openssh-client \
 	; \
 	rm -rf /var/lib/apt/lists/*
 
