@@ -96,8 +96,10 @@ RUN sh -c "$(wget https://raw.githubusercontent.com/ohmyzsh/ohmyzsh/master/tools
 
 COPY --chown=$USERNAME .zshrc .p10k.zsh /home/$USERNAME
 
-RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash
-RUN nvm install node && RUN corepack enable
+RUN wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.3/install.sh | bash \
+    && export NVM_DIR="/home/${USERNAME}/.nvm" \
+    && [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh" \
+    && nvm install node && corepack enable
 
 ENV TZ Asia/Shanghai
 
